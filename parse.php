@@ -33,58 +33,44 @@
 
 	}
 
-	preg_match_all('/SD-[0-9]+/', $input_string , $arr, PREG_PATTERN_ORDER);
-	//$sdarray = preg_grep("/SD-[0-9]+/", $input_string)
-	sort($arr[0]);
-	echo "\n\n";
-	for($x = 0; $x < sizeof($arr[0]); $x++)
-	{
-		if($x > 0 && $arr[0][$x-1] == $arr[0][$x]){
-			continue;
-		}
-		if(trim($arr[0][$x]!="")){
-			echo $arr[0][$x];
-			if($x != sizeof($arr[0])-1)
-				echo ", ";
-		}
 
-	}
 
-	preg_match_all('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string , $newarr, PREG_PATTERN_ORDER);
-	sort($newarr[0]);
-	echo "\n\n";
-	for($x = 0; $x < sizeof($newarr[0]); $x++)
-	{
-		if($x > 0 && $newarr[0][$x-1] == $newarr[0][$x]){
-			continue;
-		}
-		if(trim($newarr[0][$x]!="")){
-			echo $newarr[0][$x];
-			if($x != sizeof($newarr[0])-1)
-				echo "\n";
-		}
+	$changelistLines = MatchAndRemoveDuplicates("/Change: [0-9]+/", $input_string); //Change: 187698
+	$changelistArray = array_filter( $changelistLines, "RemoveWordChange");
+	print_r($changelistArray);
+	PrintArray($changelistArray);
 
-	}
-
-	preg_match_all('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string , $newarr, PREG_PATTERN_ORDER);
-	sort($newarr[0]);
-	echo "\n\n";
-	for($x = 0; $x < sizeof($newarr[0]); $x++)
-	{
-		if($x > 0 && $newarr[0][$x-1] == $newarr[0][$x]){
-			continue;
-		}
-		if(trim($newarr[0][$x]!="")){
-			echo $newarr[0][$x];
-			if($x != sizeof($newarr[0])-1)
-				echo "\n";
-		}
-
-	}
+	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string));
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string));
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string));
 
 	function MatchAndRemoveDuplicates($preg, $input){
 		preg_match_all($preg, $input, $newarr, PREG_PATTERN_ORDER );
-		
+		sort($newarr[0]);
+		$sortedArray = $newarr[0];
+		$result = array();
+		for($x = 0; $x < sizeof($sortedArray); $x++){ //go through the sorted array and basicall remove dupilcates
+
+			if($x > 0 && $sortedArray[$x-1] == $sortedArray[$x]){
+				continue;
+			}
+
+			if(trim($sortedArray[$x]!="")){
+				array_push($result,$sortedArray[$x]);
+			}
+		}
+		return $result;		
+	}
+
+	function PrintArray($array){
+		foreach ($array as $value){
+			echo $value."\n";
+		}
+	}
+
+	function RemoveWordChange($array){
+		//Changelist numbers come in the form of Change: 187695
+		return substr($array, 8);
 	}
 
 	//print_r($sdarray);
