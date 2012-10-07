@@ -1,48 +1,20 @@
 <?php
 	//print_r($_POST["changelist"]);
 	error_reporting(E_ALL);
-	 ini_set("display_errors", 1);
+	ini_set("display_errors", 1);
 	echo "<pre>";
-	$newstring = "";
 
 	$input_string = $_POST["changelist"];
-
-	$stringarray = preg_split("/Change: /",$input_string);
-
-	//var_dump($stringarray);
-	$changelistIDs = array();
-	for($x = 0; $x < sizeof($stringarray); $x++)
-	{
-		if(trim($stringarray[$x]!="")){
-			$temp = substr($stringarray[$x], 0, 6);
-			array_push($changelistIDs, $temp);
-		}
-	}
-
-	sort($changelistIDs);
-	for($x = 0; $x < sizeof($changelistIDs); $x++)
-	{
-		if($x > 0 && $changelistIDs[$x-1] == $changelistIDs[$x]){
-			continue;
-		}
-		if(trim($changelistIDs[$x]!="")){
-			echo $changelistIDs[$x];
-			if($x != sizeof($changelistIDs)-1)
-				echo ", ";
-		}
-
-	}
 
 
 
 	$changelistLines = MatchAndRemoveDuplicates("/Change: [0-9]+/", $input_string); //Change: 187698
-	$changelistArray = array_filter( $changelistLines, "RemoveWordChange");
-	print_r($changelistArray);
-	PrintArray($changelistArray);
+	$changelistArray = array_map( "RemoveWordChange", $changelistLines);
+	PrintArray($changelistArray, " ");
 
-	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string));
-	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string));
-	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string));
+	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string), " ");
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string), "\n");
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string), "\n");
 
 	function MatchAndRemoveDuplicates($preg, $input){
 		preg_match_all($preg, $input, $newarr, PREG_PATTERN_ORDER );
@@ -62,10 +34,11 @@
 		return $result;		
 	}
 
-	function PrintArray($array){
+	function PrintArray($array, $spacer){
 		foreach ($array as $value){
-			echo $value."\n";
+			echo $value.$spacer;
 		}
+		echo "\n";
 	}
 
 	function RemoveWordChange($array){
