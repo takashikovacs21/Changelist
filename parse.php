@@ -17,8 +17,8 @@
 	PrintArray($changelistArray, ", ", "Changelist Numbers");
 
 	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string), ", ", "SD Numbers");
-	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string), "\n", "CMS Files");
-	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string), "\n", "Application Files");
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/40\/Source\/CMSViews\/[^#]+/', $input_string), "\n", "CMS Files");
+	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/40\/Web_Solutions\/[^#]+/', $input_string), "\n", "Application Files");
 
 	function MatchAndRemoveDuplicates($preg, $input){
 		preg_match_all($preg, $input, $newarr, PREG_PATTERN_ORDER );
