@@ -14,9 +14,9 @@
 
 	$changelistLines = MatchAndRemoveDuplicates("/Change: [0-9]+/", $input_string); //Change: 187698
 	$changelistArray = array_map( "RemoveWordChange", $changelistLines);
-	PrintArray($changelistArray, " ", "Changelist Numbers");
+	PrintArray($changelistArray, ", ", "Changelist Numbers");
 
-	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string), " ", "SD Numbers");
+	PrintArray(MatchAndRemoveDuplicates('/SD-[0-9]+/', $input_string), ", ", "SD Numbers");
 	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Source\/CMSViews\/[^#]+/', $input_string), "\n", "CMS Files");
 	PrintArray(MatchAndRemoveDuplicates('/\/\/DotNet\/offcycle\/Web_Solutions\/[^#]+/', $input_string), "\n", "Application Files");
 
@@ -42,12 +42,12 @@
 		echo "<h1>$id</h1>";
 		$id_name = str_replace(" ", "_", $id);
 		echo "<div id='".$id_name."_button' class='copy_button'>Copy To Clipboard</div>";
-		if($spacer == " ")
-			echo "<textarea cols='100' rows='5' id='$id_name'>";
-		else
-			echo "<textarea cols='100' rows='20' id='$id_name'>";
-		foreach ($array as $value){
-			echo $value.$spacer;
+		echo "<textarea cols='100' rows='5' id='$id_name'>";
+		for ($x = 0; $x < sizeof($array); $x++){
+			$value = $array[$x];
+			echo $value;
+			if($x < sizeof($array) - 1)
+				echo $spacer;
 		}
 		echo "</textarea>";
 	}
